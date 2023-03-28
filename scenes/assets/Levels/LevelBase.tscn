@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://art/Levels/Overlays/Level1Overlay.png" type="Texture" id=1]
+[ext_resource path="res://scenes/assets/LevelInfo.gd" type="Script" id=2]
+[ext_resource path="res://art/Levels/References/Level1Reference.png" type="Texture" id=3]
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 2 )
+overlay = ExtResource( 1 )
+reference = ExtResource( 3 )

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://art/Pendulum/Pendulum_Segment_2.png" type="Texture" id=1]
+
+[node name="SecondArm" type="Node2D"]
+
+[node name="SecondArmSprite" type="Sprite" parent="."]
+scale = Vector2( 0.125, 0.35 )
+z_index = 5
+texture = ExtResource( 1 )

@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://art/Pendulum/Pendulum_Ink_White_2.png" type="Texture" id=1]
+[ext_resource path="res://scenes/assets/PendulumInk.gd" type="Script" id=2]
+[ext_resource path="res://art/Pendulum/Pendulum_Ink_Blue_2.png" type="Texture" id=3]
+[ext_resource path="res://art/Pendulum/Pendulum_Ink_Red_2.png" type="Texture" id=4]
+[ext_resource path="res://art/Pendulum/Pendulum_Ink_2.png" type="Texture" id=6]
+
+[node name="PendulumInk" type="Node2D"]
+script = ExtResource( 2 )
+red_path = ExtResource( 4 )
+white_path = ExtResource( 1 )
+blue_path = ExtResource( 3 )
+grey_path = ExtResource( 6 )
+
+[node name="PendulumInkSprite" type="Sprite" parent="."]
+scale = Vector2( 0.013, 0.013 )
+z_index = 1
+texture = ExtResource( 6 )

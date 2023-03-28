@@ -1,0 +1,104 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://art/UI/Level_Select_Button.png" type="Texture" id=1]
+[ext_resource path="res://art/UI/Level_Select_Button_Pressed.png" type="Texture" id=2]
+[ext_resource path="res://scripts/LevelSelect.gd" type="Script" id=3]
+[ext_resource path="res://OpenSans-VariableFont_wdth,wght.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="Theme" id=1]
+/fonts/v = null
+
+[sub_resource type="DynamicFont" id=2]
+size = 90
+outline_size = 2
+font_data = ExtResource( 4 )
+
+[node name="LevelSelect" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+margin_right = 720.0
+margin_bottom = 1080.0
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer"]
+
+[node name="LevelButton1" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
+position = Vector2( 26, 0 )
+z_index = 10
+normal = ExtResource( 1 )
+pressed = ExtResource( 2 )
+action = "1"
+
+[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton1"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "1"
+align = 1
+valign = 1
+
+[node name="LevelButton2" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
+position = Vector2( 206, 0 )
+z_index = 10
+normal = ExtResource( 1 )
+pressed = ExtResource( 2 )
+action = "2"
+
+[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton2"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "2"
+align = 1
+valign = 1
+
+[node name="LevelButton3" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
+position = Vector2( 386, 0 )
+z_index = 10
+normal = ExtResource( 1 )
+pressed = ExtResource( 2 )
+action = "3"
+
+[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton3"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "3"
+align = 1
+valign = 1
+
+[node name="LevelButton4" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
+position = Vector2( 566, 0 )
+z_index = 10
+normal = ExtResource( 1 )
+pressed = ExtResource( 2 )
+action = "4"
+
+[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton4"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "4"
+align = 1
+valign = 1
