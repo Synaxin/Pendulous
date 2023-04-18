@@ -1,0 +1,20 @@
+[gd_resource type="Theme" load_steps=6 format=2]
+
+[ext_resource path="res://OpenSans-VariableFont_wdth,wght.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://UI_theme_font.tres" type="DynamicFont" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.0352941, 0.0352941, 0.0352941, 1 )
+
+[resource]
+default_font = ExtResource( 2 )
+/colors/test = Color( 0.803922, 0.803922, 0.803922, 1 )
+/fonts/Font = SubResource( 1 )
+/styles/test = SubResource( 2 )
+Panel/colors/PanelColor = Color( 0.0352941, 0.0352941, 0.0352941, 1 )
+Panel/styles/Panel = SubResource( 3 )
