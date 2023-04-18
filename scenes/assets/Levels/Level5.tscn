@@ -10,5 +10,5 @@ num_rotations = 1.002
 rotation_direction = 1
 base_rotation = 180
 hinge_rotation = 0
-overlay = "res:///art/Levels/Overlays/Level4Overlay.png"
-reference = "res:///art/Levels/References/Level4Reference.png"
+overlay = "res:///art/Levels/Overlays/Level5Overlay.png"
+reference = "res:///art/Levels/References/Level5Reference.png"

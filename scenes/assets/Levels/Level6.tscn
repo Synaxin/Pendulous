@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scenes/assets/LevelInfo.gd" type="Script" id=1]
 
-[node name="Level" type="Node2D"]
+[node name="@Level@18895" type="Node2D"]
 script = ExtResource( 1 )
 base_length = 5
 hinge_length = 7
@@ -10,5 +10,5 @@ num_rotations = 1.002
 rotation_direction = 1
 base_rotation = 180
 hinge_rotation = 0
-overlay = "res:///art/Levels/Overlays/Level4Overlay.png"
-reference = "res:///art/Levels/References/Level4Reference.png"
+overlay = "res:///art/Levels/Overlays/Level6Overlay.png"
+reference = "res:///art/Levels/References/Level6Reference.png"

@@ -1,0 +1,192 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://art/UI/Play_Button.png" type="Texture" id=1]
+[ext_resource path="res://OpenSans-VariableFont_wdth,wght.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://LevelSelect.tres" type="StyleBox" id=3]
+[ext_resource path="res://scripts/CompleteMenu.gd" type="Script" id=4]
+[ext_resource path="res://art/UI/Play_Button_Lock.png" type="Texture" id=5]
+[ext_resource path="res://art/UI/DisplayButton.png" type="Texture" id=6]
+
+[sub_resource type="Theme" id=1]
+/fonts/v = null
+
+[sub_resource type="DynamicFont" id=2]
+size = 60
+outline_size = 2
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 30
+outline_size = 1
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 30
+outline_size = 1
+outline_color = Color( 0.878431, 0.52549, 0, 1 )
+use_filter = true
+font_data = ExtResource( 2 )
+
+[node name="CompleteMenu" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -360.0
+margin_top = -540.0
+margin_right = 360.0
+margin_bottom = 540.0
+script = ExtResource( 4 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 9
+visible = false
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -270.0
+margin_top = -405.0
+margin_right = 450.0
+margin_bottom = 675.0
+rect_scale = Vector2( 0.75, 0.75 )
+custom_styles/panel = ExtResource( 3 )
+
+[node name="DisplayButton" type="TouchScreenButton" parent="CanvasLayer/Panel"]
+position = Vector2( 104, 150 )
+z_index = 10
+normal = ExtResource( 1 )
+
+[node name="Text" type="Label" parent="CanvasLayer/Panel/DisplayButton"]
+margin_right = 512.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "View Drawing"
+align = 1
+valign = 1
+
+[node name="NextLevelButton" type="TouchScreenButton" parent="CanvasLayer/Panel"]
+position = Vector2( 104, 375 )
+z_index = 10
+normal = ExtResource( 1 )
+
+[node name="Text" type="Label" parent="CanvasLayer/Panel/NextLevelButton"]
+margin_right = 512.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Next Level"
+align = 1
+valign = 1
+
+[node name="Lock" type="Sprite" parent="CanvasLayer/Panel/NextLevelButton"]
+position = Vector2( 0, -0.333313 )
+texture = ExtResource( 5 )
+offset = Vector2( 256, 64 )
+
+[node name="RetryButton" type="TouchScreenButton" parent="CanvasLayer/Panel"]
+position = Vector2( 104, 600 )
+z_index = 10
+normal = ExtResource( 1 )
+
+[node name="Text" type="Label" parent="CanvasLayer/Panel/RetryButton"]
+margin_right = 512.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Retry"
+align = 1
+valign = 1
+
+[node name="LevelSelectButton" type="TouchScreenButton" parent="CanvasLayer/Panel"]
+position = Vector2( 104, 825 )
+z_index = 10
+normal = ExtResource( 1 )
+
+[node name="Text" type="Label" parent="CanvasLayer/Panel/LevelSelectButton"]
+margin_right = 512.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Level Select"
+align = 1
+valign = 1
+
+[node name="AccuracyText" type="Label" parent="CanvasLayer/Panel"]
+margin_left = 104.0
+margin_right = 616.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Accuracy: 100"
+align = 1
+valign = 1
+
+[node name="NextLevelText" type="Label" parent="CanvasLayer/Panel"]
+margin_left = 56.0
+margin_top = 261.333
+margin_right = 656.0
+margin_bottom = 389.333
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Reach 70 Accuracy to unlock the next level!"
+align = 1
+valign = 1
+
+[node name="NoNextLevelText" type="Label" parent="CanvasLayer/Panel"]
+visible = false
+margin_left = 56.0
+margin_top = 261.333
+margin_right = 656.0
+margin_bottom = 389.333
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Reached the end of the levels!"
+align = 1
+valign = 1
+
+[node name="PraiseText" type="Label" parent="CanvasLayer/Panel"]
+margin_left = 370.667
+margin_top = 46.6667
+margin_right = 882.667
+margin_bottom = 174.667
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "New Best!"
+align = 1
+valign = 1
+
+[node name="DisplayingButton" type="TouchScreenButton" parent="."]
+visible = false
+position = Vector2( -2290, -2062 )
+scale = Vector2( 10, 10 )
+normal = ExtResource( 6 )
