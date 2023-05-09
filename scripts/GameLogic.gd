@@ -123,16 +123,7 @@ func _load_level(level_num):
 		reference = null
 		while not is_instance_valid(reference):
 			reference = ref.get_data()
-		var arm_info = null
-		while not is_instance_valid(arm_info):
-			active_scene._get_arm_info()
-		var rot_info = null
-		while not is_instance_valid(rot_info):
-			rot_info = active_scene._get_rotation_info()
-		var start_info = null
-		while not is_instance_valid(start_info):
-			start_info = active_scene._get_start_info()
-		pendulum._initialize_pendulum(arm_info, rot_info, start_info, current_level, overlay)
+		pendulum._initialize_pendulum(active_scene._get_arm_info(), active_scene._get_rotation_info(), active_scene._get_start_info(), current_level, overlay)
 		#print("Load step5")
 		#pendulum._reset()
 		#reference = active_scene._get_reference()
@@ -349,7 +340,6 @@ func _open_save(initiate):
 	for i in range(0, num_levels):
 		if level_progresses[i] >= accuracy_c:
 			highest_level = i + 2
-		highest_level = 22
 		level_select._update_progress(i + 1, level_progresses[i])
 	"""
 	if highest_level > 2: #FIXME
