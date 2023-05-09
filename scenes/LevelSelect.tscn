@@ -1,40 +1,147 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://art/UI/Level_Select_Button.png" type="Texture" id=1]
 [ext_resource path="res://art/UI/Level_Select_Button_Pressed.png" type="Texture" id=2]
 [ext_resource path="res://scripts/LevelSelect.gd" type="Script" id=3]
 [ext_resource path="res://OpenSans-VariableFont_wdth,wght.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://scenes/assets/UI/LevelButton.tscn" type="PackedScene" id=5]
+[ext_resource path="res://LevelSelect.tres" type="StyleBox" id=6]
 
 [sub_resource type="Theme" id=1]
 /fonts/v = null
 
 [sub_resource type="DynamicFont" id=2]
-size = 90
+size = 60
 outline_size = 2
+use_filter = true
 font_data = ExtResource( 4 )
 
 [node name="LevelSelect" type="Control"]
+script = ExtResource( 3 )
+level_button = ExtResource( 5 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 9
+visible = false
+
+[node name="TopPanel" type="Panel" parent="CanvasLayer"]
+show_behind_parent = true
+anchor_right = 1.0
+margin_right = 612.0
+margin_bottom = 128.0
+size_flags_horizontal = 2
+custom_styles/panel = ExtResource( 6 )
+
+[node name="MenuButton" type="TouchScreenButton" parent="CanvasLayer/TopPanel"]
+position = Vector2( 38, 17 )
+scale = Vector2( 0.75, 0.75 )
+z_index = 10
+normal = ExtResource( 1 )
+pressed = ExtResource( 2 )
+
+[node name="LevelText" type="Label" parent="CanvasLayer/TopPanel/MenuButton"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "X"
+align = 1
+valign = 1
+
+[node name="BottomPanel" type="Panel" parent="CanvasLayer"]
+show_behind_parent = true
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 3 )
+margin_top = -128.0
+margin_right = 612.0
+size_flags_horizontal = 3
+custom_styles/panel = ExtResource( 6 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-margin_right = 720.0
-margin_bottom = 1080.0
-scroll_horizontal_enabled = false
+[node name="Control" type="Control" parent="CanvasLayer/BottomPanel"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -666.0
+margin_right = -626.0
+margin_bottom = 40.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="PageBack" type="TouchScreenButton" parent="CanvasLayer/BottomPanel/Control"]
+position = Vector2( 38, 17 )
+scale = Vector2( 0.75, 0.75 )
+z_index = 10
+normal = ExtResource( 1 )
+pressed = ExtResource( 2 )
 
-[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/BottomPanel/Control/PageBack"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "<"
+align = 1
+valign = 1
 
-[node name="LevelButton1" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
-position = Vector2( 26, 0 )
+[node name="PageNext" type="TouchScreenButton" parent="CanvasLayer/BottomPanel/Control"]
+position = Vector2( 586, 17 )
+scale = Vector2( 0.75, 0.75 )
+z_index = 10
+normal = ExtResource( 1 )
+pressed = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/BottomPanel/Control/PageNext"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = ">"
+align = 1
+valign = 1
+
+[node name="PageText" type="Label" parent="CanvasLayer/BottomPanel/Control"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = 66.0
+margin_right = 614.0
+margin_bottom = 128.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Page: 1/X"
+align = 1
+valign = 1
+
+[node name="LevelButtonContainer" type="Control" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -360.0
+margin_top = -412.0
+margin_right = -360.0
+margin_bottom = -410.96
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelButton101" type="TouchScreenButton" parent="CanvasLayer/LevelButtonContainer"]
+visible = false
+position = Vector2( 186, 40 )
 z_index = 10
 normal = ExtResource( 1 )
 pressed = ExtResource( 2 )
 action = "1"
 
-[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton1"]
+[node name="LevelText" type="Label" parent="CanvasLayer/LevelButtonContainer/LevelButton101"]
 margin_right = 128.0
 margin_bottom = 128.0
 theme = SubResource( 1 )
@@ -46,14 +153,15 @@ text = "1"
 align = 1
 valign = 1
 
-[node name="LevelButton2" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
-position = Vector2( 206, 0 )
+[node name="LevelButton102" type="TouchScreenButton" parent="CanvasLayer/LevelButtonContainer"]
+visible = false
+position = Vector2( 378, 40 )
 z_index = 10
 normal = ExtResource( 1 )
 pressed = ExtResource( 2 )
-action = "2"
+action = "1"
 
-[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton2"]
+[node name="LevelText" type="Label" parent="CanvasLayer/LevelButtonContainer/LevelButton102"]
 margin_right = 128.0
 margin_bottom = 128.0
 theme = SubResource( 1 )
@@ -61,18 +169,26 @@ custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
 custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
 custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
 custom_fonts/font = SubResource( 2 )
-text = "2"
+text = "1"
 align = 1
 valign = 1
 
-[node name="LevelButton3" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
-position = Vector2( 386, 0 )
+[node name="Control" type="Control" parent="CanvasLayer/LevelButtonContainer"]
+visible = false
+margin_left = -52.0
+margin_right = 772.0
+margin_bottom = 824.0
+size_flags_horizontal = 15
+size_flags_vertical = 15
+
+[node name="LevelButton100" type="TouchScreenButton" parent="CanvasLayer/LevelButtonContainer/Control"]
+position = Vector2( 78, 40 )
 z_index = 10
 normal = ExtResource( 1 )
 pressed = ExtResource( 2 )
-action = "3"
+action = "1"
 
-[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton3"]
+[node name="LevelText" type="Label" parent="CanvasLayer/LevelButtonContainer/Control/LevelButton100"]
 margin_right = 128.0
 margin_bottom = 128.0
 theme = SubResource( 1 )
@@ -80,25 +196,6 @@ custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
 custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
 custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
 custom_fonts/font = SubResource( 2 )
-text = "3"
-align = 1
-valign = 1
-
-[node name="LevelButton4" type="TouchScreenButton" parent="ScrollContainer/VBoxContainer"]
-position = Vector2( 566, 0 )
-z_index = 10
-normal = ExtResource( 1 )
-pressed = ExtResource( 2 )
-action = "4"
-
-[node name="LevelText" type="Label" parent="ScrollContainer/VBoxContainer/LevelButton4"]
-margin_right = 128.0
-margin_bottom = 128.0
-theme = SubResource( 1 )
-custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
-custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
-custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
-custom_fonts/font = SubResource( 2 )
-text = "4"
+text = "1"
 align = 1
 valign = 1

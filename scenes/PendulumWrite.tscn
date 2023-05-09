@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scripts/PendulumWrite.gd" type="Script" id=1]
 [ext_resource path="res://art/Pendulum/Pendulum_Base_2.png" type="Texture" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://scenes/assets/Sprites/SecondArm.tscn" type="PackedScene" id=15]
 [ext_resource path="res://scenes/assets/Sprites/FirstArm.tscn" type="PackedScene" id=16]
 [ext_resource path="res://scenes/assets/Levels/LevelBase.tscn" type="PackedScene" id=17]
+[ext_resource path="res://art/Backdrop.png" type="Texture" id=18]
 
 [sub_resource type="World" id=1]
 
@@ -27,11 +28,11 @@ secondArm = ExtResource( 15 )
 ink = ExtResource( 14 )
 write_scene = ExtResource( 17 )
 write_level = -1
-num_rotations = 1.002
-
-[node name="ViewportContainer" type="ViewportContainer" parent="."]
-margin_right = 720.0
-margin_bottom = 1080.0
+write_base_arm = 2
+write_hinge_arm = 2
+num_rotations = 0.25
+start_rotation_base = 270
+start_rotation_hinge = -45
 
 [node name="PendulumBase" type="Node2D" parent="."]
 visible = false
@@ -183,3 +184,10 @@ margin_left = 307.0
 margin_right = 347.0
 margin_bottom = 40.0
 text = "-1"
+
+[node name="Background" type="Sprite" parent="."]
+show_behind_parent = true
+position = Vector2( 397, 559 )
+scale = Vector2( 4, 4 )
+z_index = 1
+texture = ExtResource( 18 )

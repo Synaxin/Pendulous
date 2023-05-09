@@ -1,0 +1,523 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://OpenSans-VariableFont_wdth,wght.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://art/UI/Options_Button.png" type="Texture" id=2]
+[ext_resource path="res://UI_Theme.tres" type="Theme" id=3]
+[ext_resource path="res://art/UI/Level_Select_Button_Pressed.png" type="Texture" id=4]
+[ext_resource path="res://art/UI/Level_Select_Button.png" type="Texture" id=5]
+[ext_resource path="res://scripts/OptionsFromMenu.gd" type="Script" id=6]
+[ext_resource path="res://art/UI/Options_Button_Pressed.png" type="Texture" id=7]
+
+[sub_resource type="DynamicFont" id=2]
+size = 28
+outline_size = 1
+outline_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=3]
+default_font = SubResource( 2 )
+/fonts/Font = SubResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 18
+outline_size = 1
+outline_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=5]
+default_font = SubResource( 4 )
+/fonts/Font = SubResource( 2 )
+
+[sub_resource type="Theme" id=6]
+/fonts/v = null
+
+[sub_resource type="DynamicFont" id=7]
+size = 60
+outline_size = 2
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0352941, 0.0352941, 0.0352941, 1 )
+
+[node name="Options" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+not_pressed = ExtResource( 2 )
+is_pressed = ExtResource( 7 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 9
+visible = false
+
+[node name="OptionsPanel" type="Control" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.167
+anchor_right = 0.5
+anchor_bottom = 0.187
+margin_left = -270.0
+margin_top = -0.360001
+margin_right = 450.0
+margin_bottom = 958.04
+rect_scale = Vector2( 0.75, 0.75 )
+theme = ExtResource( 3 )
+
+[node name="Control" type="Control" parent="CanvasLayer/OptionsPanel"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.961
+margin_left = -361.08
+margin_right = -321.08
+margin_bottom = 40.0
+grow_horizontal = 0
+
+[node name="PendulumSpeed" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 96.0
+margin_right = 220.92
+margin_bottom = 160.0
+grow_horizontal = 2
+rect_pivot_offset = Vector2( 178.667, 0 )
+theme = SubResource( 3 )
+text = "Pendulum Speed"
+align = 1
+valign = 1
+
+[node name="BaseCompass" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 224.0
+margin_right = 255.92
+margin_bottom = 288.0
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Base Compass"
+align = 1
+valign = 1
+
+[node name="PenCompass" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 352.0
+margin_right = 255.92
+margin_bottom = 416.0
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Pen Compass"
+align = 1
+valign = 1
+
+[node name="Music" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 480.0
+margin_right = 255.92
+margin_bottom = 544.0
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Music"
+align = 1
+valign = 1
+
+[node name="Sound" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 608.0
+margin_right = 255.92
+margin_bottom = 672.0
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Sound"
+align = 1
+valign = 1
+
+[node name="SaveProfile" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 736.0
+margin_right = 255.92
+margin_bottom = 800.0
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Save Profiles"
+align = 1
+valign = 1
+
+[node name="DelProfShown" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 864.0
+margin_right = 255.92
+margin_bottom = 928.0
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+align = 1
+valign = 1
+
+[node name="PSDesc" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 160.0
+margin_right = 314.92
+margin_bottom = 224.0
+rect_pivot_offset = Vector2( 214, 117 )
+theme = SubResource( 5 )
+text = "Pick a speed you're comfortable with!"
+align = 1
+valign = 1
+
+[node name="BCDesc" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 288.0
+margin_right = 382.92
+margin_bottom = 352.0
+rect_pivot_offset = Vector2( 214, 117 )
+theme = SubResource( 5 )
+text = "Whether or not the center compass is shown."
+align = 1
+valign = 1
+
+[node name="PCDesc" type="Label" parent="CanvasLayer/OptionsPanel"]
+margin_left = -1.08002
+margin_top = 416.0
+margin_right = 382.92
+margin_bottom = 480.0
+rect_pivot_offset = Vector2( 214, 117 )
+theme = SubResource( 5 )
+text = "Whether or not the pen compass is shown."
+align = 1
+valign = 1
+
+[node name="SlowButton" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 277, 96 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/SlowButton"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Slow"
+align = 1
+valign = 1
+
+[node name="BaseCompOn" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 277, 224 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/BaseCompOn"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "On"
+align = 1
+valign = 1
+
+[node name="MediumButton" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 436, 96 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/MediumButton"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Medium"
+align = 1
+valign = 1
+
+[node name="FastButton" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 590, 96 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/FastButton"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Fast"
+align = 1
+valign = 1
+
+[node name="Profile1" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 277, 736 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/Profile1"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "1"
+align = 1
+valign = 1
+
+[node name="Profile2" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 436, 736 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/Profile2"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "2"
+align = 1
+valign = 1
+
+[node name="Profile3" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 590, 736 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/Profile3"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "3"
+align = 1
+valign = 1
+
+[node name="BaseCompOff" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 436, 224 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/BaseCompOff"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Off"
+align = 1
+valign = 1
+
+[node name="PenCompOn" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 277, 352 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/PenCompOn"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "On"
+align = 1
+valign = 1
+
+[node name="MusicOn" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 277.333, 480 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/MusicOn"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "On"
+align = 1
+valign = 1
+
+[node name="DeleteProf" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 436, 864 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/DeleteProf"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Delete"
+align = 1
+valign = 1
+
+[node name="SoundOn" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 277.333, 608 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/SoundOn"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "On"
+align = 1
+valign = 1
+
+[node name="PenCompOff" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 436, 352 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/PenCompOff"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Off"
+align = 1
+valign = 1
+
+[node name="MusicOff" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 436, 480 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/MusicOff"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Off"
+align = 1
+valign = 1
+
+[node name="SoundOff" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+position = Vector2( 436, 608 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsPanel/SoundOff"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Off"
+align = 1
+valign = 1
+
+[node name="MenuButton" type="TouchScreenButton" parent="CanvasLayer/OptionsPanel"]
+scale = Vector2( 0.75, 0.75 )
+z_index = 10
+normal = ExtResource( 5 )
+pressed = ExtResource( 4 )
+
+[node name="LevelText" type="Label" parent="CanvasLayer/OptionsPanel/MenuButton"]
+margin_right = 128.0
+margin_bottom = 128.0
+theme = SubResource( 6 )
+custom_colors/font_color = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_outline_modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_colors/font_color_shadow = Color( 0.803922, 0.803922, 0.803922, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "X"
+align = 1
+valign = 1
+
+[node name="ConfirmationLayer" type="CanvasLayer" parent="."]
+layer = 12
+visible = false
+
+[node name="OptionsPanel2" type="Control" parent="ConfirmationLayer"]
+anchor_left = 0.5
+anchor_top = 0.167
+anchor_right = 0.5
+anchor_bottom = 0.187
+margin_left = -270.0
+margin_top = -0.360001
+margin_right = 450.0
+margin_bottom = 958.04
+rect_scale = Vector2( 0.75, 0.75 )
+theme = ExtResource( 3 )
+
+[node name="OptionsPanel" type="Panel" parent="ConfirmationLayer/OptionsPanel2"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -208.0
+margin_top = -158.0
+margin_right = 352.0
+margin_bottom = 418.0
+rect_scale = Vector2( 0.75, 0.75 )
+theme = ExtResource( 3 )
+custom_styles/panel = SubResource( 1 )
+
+[node name="DelProfText" type="Label" parent="ConfirmationLayer/OptionsPanel2/OptionsPanel"]
+margin_left = 152.0
+margin_top = 69.333
+margin_right = 408.0
+margin_bottom = 133.333
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Delete Profile #?"
+align = 1
+valign = 1
+
+[node name="DelProfDesc" type="Label" parent="ConfirmationLayer/OptionsPanel2/OptionsPanel"]
+margin_left = 130.0
+margin_top = 133.333
+margin_right = 430.0
+margin_bottom = 214.333
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Progress will be erased
+this cannot be undone"
+align = 1
+valign = 1
+
+[node name="DelProfYes" type="TouchScreenButton" parent="ConfirmationLayer/OptionsPanel2/OptionsPanel"]
+position = Vector2( 382, 274 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="ConfirmationLayer/OptionsPanel2/OptionsPanel/DelProfYes"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Yes"
+align = 1
+valign = 1
+
+[node name="DelProfNo" type="TouchScreenButton" parent="ConfirmationLayer/OptionsPanel2/OptionsPanel"]
+position = Vector2( 50, 274 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="ConfirmationLayer/OptionsPanel2/OptionsPanel/DelProfNo"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "No"
+align = 1
+valign = 1
+
+[node name="ConfirmationLayer2" type="CanvasLayer" parent="."]
+layer = 13
+visible = false
+
+[node name="OptionsPanel2" type="Control" parent="ConfirmationLayer2"]
+anchor_left = 0.5
+anchor_top = 0.167
+anchor_right = 0.5
+anchor_bottom = 0.187
+margin_left = -270.0
+margin_top = -0.360001
+margin_right = 450.0
+margin_bottom = 958.04
+rect_scale = Vector2( 0.75, 0.75 )
+theme = ExtResource( 3 )
+
+[node name="OptionsPanel" type="Panel" parent="ConfirmationLayer2/OptionsPanel2"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -208.0
+margin_top = -158.0
+margin_right = 352.0
+margin_bottom = 418.0
+rect_scale = Vector2( 0.75, 0.75 )
+theme = ExtResource( 3 )
+custom_styles/panel = SubResource( 1 )
+
+[node name="DelProfText" type="Label" parent="ConfirmationLayer2/OptionsPanel2/OptionsPanel"]
+margin_left = 152.0
+margin_top = 69.333
+margin_right = 408.0
+margin_bottom = 133.333
+rect_pivot_offset = Vector2( 208, 234 )
+theme = SubResource( 3 )
+text = "Are you sure?"
+align = 1
+valign = 1
+
+[node name="DelProfYes" type="TouchScreenButton" parent="ConfirmationLayer2/OptionsPanel2/OptionsPanel"]
+position = Vector2( 382, 466 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="ConfirmationLayer2/OptionsPanel2/OptionsPanel/DelProfYes"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "Yes"
+align = 1
+valign = 1
+
+[node name="DelProfNo" type="TouchScreenButton" parent="ConfirmationLayer2/OptionsPanel2/OptionsPanel"]
+position = Vector2( 50, 466 )
+normal = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="ConfirmationLayer2/OptionsPanel2/OptionsPanel/DelProfNo"]
+margin_right = 128.0
+margin_bottom = 64.0
+theme = SubResource( 3 )
+text = "No"
+align = 1
+valign = 1
