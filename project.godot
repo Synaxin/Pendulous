@@ -12,12 +12,19 @@ config_version=4
 
 config/name="Pendulous"
 run/main_scene="res://scenes/GameScreen.tscn"
+boot_splash/image="res://art/Splash_Screen.png"
+boot_splash/bg_color=Color( 0.0862745, 0.0862745, 0.0862745, 1 )
 config/icon="res://icon.png"
+
+[debug]
+
+settings/stdout/verbose_stdout=true
 
 [display]
 
 window/size/width=720
 window/size/height=1080
+window/dpi/allow_hidpi=true
 window/handheld/orientation="portrait"
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
@@ -48,7 +55,7 @@ reset={
 }
 Write={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777221,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777235,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 
