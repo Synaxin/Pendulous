@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/assets/LevelInfo.gd" type="Script" id=1]
+[ext_resource path="res://art/Levels/Overlays/Level78Overlay.png" type="Texture" id=2]
+[ext_resource path="res://art/Levels/References/Level78Reference.png" type="Texture" id=3]
+
+[node name="@Level@25177" type="Node2D"]
+script = ExtResource( 1 )
+base_length = 6
+hinge_length = 6
+num_rotations = 2.002
+rotation_direction = -1
+base_rotation = 0
+hinge_rotation = 90
+overlay = "res:///art/Levels/Overlays/Level78Overlay.png"
+reference = "res:///art/Levels/References/Level78Reference.png"
+overlay_img = ExtResource( 2 )
+ref_img = ExtResource( 3 )
