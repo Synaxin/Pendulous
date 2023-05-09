@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/PendulousActual.mp3-65333f398eb2a1e408289fe11c39d5ba.mp3str"
+
+[deps]
+
+source_file="res://audio/PendulousActual.mp3"
+dest_files=[ "res://.import/PendulousActual.mp3-65333f398eb2a1e408289fe11c39d5ba.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
