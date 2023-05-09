@@ -23,13 +23,33 @@ var compass
 var compass_needle
 var compass_base
 var text_box
-
 #Input
 
 var button_right_on = false
 var button_left_on = false
 var button_last_pressed = 0
 var button_currently_active = 0
+
+var intervals = 0
+
+#base arm 5
+#hinge arm 7
+#rot dir 1
+#num rot 1.002
+#baserot 90
+#hingerot 0
+
+#1-12 base 5 hinge 7 rot 1
+#13-20 base 3 hinge 9 rot 1
+#21-31 base 7 hinge 3 rot 1.5
+#32-40 base 9 hinge 8 rot 1.5
+#41-50 base 5 hinge 7 rot 1 dir left
+#51-60 base 3 hinge 9 rot 1 dir left
+#61-68 base 3 hinge 12 rot 1.5 dir left
+#69-76 base 4 hinge 4 rot 1.5 dir right
+#77-84 base 6 hinge 6 rot 2 dir left baserot 0 hingerot 90
+#85-92 base 5 hinge 7 rot 2 dir right baserot 135 hingerot 180
+#93-100 base 9 hinge 8 rot 2 dir left baserot 90 hingerot 0
 
 var write_mode = true
 export var write_level = 1
@@ -139,7 +159,7 @@ func _process(delta):
 	if stop_rotation <= 0 and stop_timer <= stop_rotation or stop_rotation >= 0 and stop_timer >= stop_rotation and !stopped:
 		active = false
 		complete = true
-		_toggle_visibility(false, false)
+		#_toggle_visibility(false, false)
 		
 		stopped = true
 		#if !img_saved:
@@ -148,6 +168,7 @@ func _process(delta):
 			#final_img.flip_y()
 			#emit_signal("done")
 	elif !active and !stopped:
+		active = true
 		if start_next:
 			if menu_pressed:
 				start_next = false
@@ -234,8 +255,8 @@ func _toggle_visibility(on, menu):
 		pendulumBase.show()
 		pendulumHinge.show()
 		pendulumPen.show()
-		compass.show()
-		compass_base.show()
+		#compass.show()
+		#compass_base.show()
 		if menu:
 			buttonLeft.show()
 			buttonRight.show()
@@ -345,6 +366,7 @@ func _pendulum_rotation(delta):
 			rotationIntervalTimer = fmod(rotationIntervalTimer, rotationInterval)
 			
 			for i in range(div * intervalMultiplier):
+				intervals += 1
 				stop_timer += rad2deg(baseRotationPerInterval * rotationDirection)
 				pendulumBase.rotation += baseRotationPerInterval * rotationDirection
 				if pendulumBase.rotation >= base_rotation_goal && rotationDirection > 0 or pendulumBase.rotation <= base_rotation_goal and rotationDirection < 0:
@@ -411,7 +433,7 @@ func _write():
 	var packed_scene = PackedScene.new()
 	packed_scene.pack(level_scene)
 	ResourceSaver.save("res:///scenes/assets/Levels/Level" + str(text_box.text) + ".tscn", packed_scene)
-	print("Write Finished!")
+	print("Write Finished! Level: " + str(text_box.text))
 	
 func save_to(path, viewport, transparent, type):
 	#print("save")
@@ -452,13 +474,19 @@ func _reset():
 	pendulumHinge.rotation = deg2rad(start_rotation_hinge)
 	_toggle_visibility(true, false)
 	stopped = false
+	print(intervals)
+	intervals = 0
+	
 	for i in inkHolder.get_children():
+		#i.position = Vector2(-100, -100)
 		i.queue_free()
 		
 	for i in sub_viewport.get_children():
+		#i.position = Vector2(-100, -100)
 		i.queue_free()
 		
 	for i in view_draw_subport.get_children():
+		#i.position = Vector2(-100, -100)
 		i.queue_free()
 		
 	emit_signal("reset")

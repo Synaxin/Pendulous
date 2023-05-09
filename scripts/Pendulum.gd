@@ -19,16 +19,32 @@ onready var button_reset = $ResetButtonControl/ResetButton
 onready var button_menu = $MenuButtonControl/MenuButton
 onready var compass = $PendControl/ZNode/ViewportContainer/Viewport/Compass
 onready var compass_base = $PendControl/ZNode/ViewportContainer/Viewport/BaseCompass
+onready var compass_base_sprite = $PendControl/ZNode/ViewportContainer/Viewport/BaseCompass/CompassSprite
 onready var compass_needle = $PendControl/ZNode/ViewportContainer/Viewport/Compass/CompassNeedle
 onready var compass_needle_2 = $PendControl/ZNode/ViewportContainer/Viewport/BaseCompass/CompassNeedle2
 onready var level_overlay = $PendControl/ZNode/ViewportContainer/Viewport/LevelOverlay
+onready var info_control = $CanvasLayer/InfoControl
+onready var rotation_text = $CanvasLayer/InfoControl/RotationsText
+onready var direction_text = $CanvasLayer/InfoControl/DirectionText
+onready var level_text = $CanvasLayer/InfoControl/LevelText
+onready var left_panel = $CanvasLayer/SideControl/LeftPanel
+onready var right_panel = $CanvasLayer/SideControl/RightPanel
+onready var panel_control = $CanvasLayer/SideControl
+
+var compass_normal_sprite = load("res:///art/Pendulum/Compass.png")
+var compass_expand_sprites = []
+
+
 
 #Input
 
 var button_right_on = false
 var button_left_on = false
+var button_right_locked = true
+var button_left_locked = true
 var button_last_pressed = 0
 var button_currently_active = 0
+var inputs_active = false
 
 
 
@@ -39,7 +55,7 @@ export var write_hinge_arm = 7
 export var ink_white_size = 0.0625
 export var ink_red_size = 0.0125
 export var ink_blue_size = 0.04
-export var ink_norm_size = 0.0125
+export var ink_norm_size = 0.018
 var active = false
 export var num_rotations = 1.0
 var stop_rotation = 0
@@ -79,11 +95,19 @@ export var second_arm_to_pen_dist = 56
 
 var base_comp_vis = true
 var pen_comp_vis = true
+var panel_vis = true
+var panel_max_size = 16
+var panel_min_size = 2
+var panel_size = 2
+var panel_size_mod = 8
+var panel_size_increasing = true
+var panel_style
 
 var initialized = false
 var before_start = true
 var start_next = false
 var start_next_recognized = false
+var start_buffer_side = 0
 
 onready var sub_viewport = $PendControl/DetectionContainer/SubViewport
 onready var view_draw_subport = $PendControl/ViewDrawContainer/SubViewport
@@ -99,15 +123,49 @@ export(NodePath) var viewport_path = null
 
 onready var target_viewport = sub_viewport.get_viewport()
 
+var array_ink_index = 0
+var array_ink = []
+var array_underlay = []
+var array_eof = false
+
+var shape = RectangleShape2D.new()
+var screen_size
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	for i in range(16):
+		var spr = load("res:///art/Pendulum/PendulumExpand/CompassExpand" + str(i) + ".png")
+		compass_expand_sprites.append(spr)
 	button_left.connect("pressed", self, "_on_pendulum_button_left")
 	button_left.connect("released", self, "_off_pendulum_button_left")
 	button_right.connect("pressed", self, "_on_pendulum_button_right")
 	button_right.connect("released", self, "_off_pendulum_button_right")
 	button_reset.connect("released", self, "_reset")
 	button_menu.connect("pressed", self, "_menu")
+	screen_size = get_viewport().size
+	print(screen_size, "Screen_size")
+	shape.extents = Vector2(screen_size.x / 4, screen_size.y / 1.25)
+	button_left.shape = shape
+	button_right.shape = shape
+	button_left.position = Vector2(0, screen_size.y - (screen_size.y / 1.25))
+	button_right.position = Vector2(screen_size.x / 2 , screen_size.y - (screen_size.y / 1.25))
+	left_panel.rect_position = Vector2(0, screen_size.y - (screen_size.y / 1.25))
+	right_panel.rect_position = Vector2(screen_size.x / 2 , screen_size.y - (screen_size.y / 1.25))
+	left_panel.rect_size = Vector2(screen_size.x / 2, screen_size.y / 1.25)
+	right_panel.rect_size = Vector2(screen_size.x / 2, screen_size.y / 1.25)
+	panel_style = StyleBoxFlat.new()
+	panel_style.draw_center = false
+	panel_style.bg_color = Color(0.76, 0.76, 0.76, 0.4)
+	panel_style.border_color = Color(0.76, 0.76, 0.76, 0.4)
+	print("Panel color ", panel_style.border_color)
+	panel_style.border_width_bottom = panel_min_size
+	panel_style.border_width_left = panel_min_size
+	panel_style.border_width_right = panel_min_size
+	panel_style.border_width_top = panel_min_size
+	panel_size = panel_min_size
+	right_panel.add_stylebox_override("Style", panel_style)
+	left_panel.set("custom_styles/panel", panel_style)
+	right_panel.set("custom_styles/panel", panel_style)
 	#if write_mode:
 		#_initialize_pendulum(Vector2(write_base_arm, write_hinge_arm))
 	
@@ -140,23 +198,48 @@ func _process(delta):
 			emit_signal("done")
 			
 	elif !active and !stopped:
+		if panel_vis:
+			if panel_size_increasing:
+				panel_size += delta * panel_size_mod
+				if panel_size >= panel_max_size:
+					panel_size_increasing = false
+					panel_size = panel_max_size
+			else:
+				panel_size -= delta * panel_size_mod
+				if panel_size <= panel_min_size:
+					panel_size_increasing = true
+					panel_size = panel_min_size
+			panel_style.border_width_bottom = panel_size
+			panel_style.border_width_left = panel_size
+			panel_style.border_width_right = panel_size
+			panel_style.border_width_top = panel_size
 		if start_next:
 			if menu_pressed:
 				start_next = false
 				start_next_recognized = false
-			elif start_next_recognized:
+			elif start_next_recognized: #Start rotation at next tick on compass
 				if hinge_rotation_buffered:
 					hinge_rotation_buffered = false
 					hinge_rotation_active = true
-				active = true
+					active = true
+					if panel_vis:
+						panel_control.hide()
+				else:
+					start_next = false
+					start_next_recognized = false
+				
 			else:
 				start_next_recognized = true
+				hinge_rotation_last_direction = start_buffer_side
 		
 	if !menu_pressed:
 		_rotation_input()
 		_pendulum_rotation(delta)
+		_handle_pendulum_expand()
 		if initialized:
+			#print("Compass1")
 			_handle_compass()
+			#print("Compass2")
 
 func save_to(path, viewport):
 	#print("save")
@@ -169,7 +252,8 @@ func get_drawing():
 	var img = view_draw_subport.get_texture().get_data()
 	return img
 
-func _initialize_pendulum(arm_segments, rotation, start):
+func _initialize_pendulum(arm_segments, rotation, start, level, overlay):
+	#print("Initialize1")
 	menu_pressed = false
 	
 	var currSpace = base_to_first_segment_dist
@@ -179,7 +263,7 @@ func _initialize_pendulum(arm_segments, rotation, start):
 		var arm = first_arm.instance()
 		pendulum_base_arm.add_child(arm)
 		arm.position = Vector2(0, currSpace)
-		
+	
 	currSpace += first_arm_to_hinge_dist
 	pendulum_hinge.position = Vector2(0, currSpace)
 	currSpace = hinge_to_second_segment_dist
@@ -189,17 +273,38 @@ func _initialize_pendulum(arm_segments, rotation, start):
 		var arm = second_arm.instance()
 		pendulum_hinge_arm.add_child(arm)
 		arm.position = Vector2(0, currSpace)
-		
+	
 	currSpace += second_arm_to_pen_dist
 	pendulum_pen.position = Vector2(0, currSpace)
 	initialized = true
 	num_rotations = rotation.x
 	rotation_direction = rotation.y
+	var rounded_rotation = int(num_rotations)
+	if abs(num_rotations) > 0.9 and abs(num_rotations) < 1.1:
+		rounded_rotation = 1 * sign(num_rotations)
+	elif abs(num_rotations) > 1.4 and abs(num_rotations) < 1.6:
+		rounded_rotation = 1.5 * sign(num_rotations)
+	elif abs(num_rotations) > 1.9 and abs(num_rotations) < 2.1:
+		rounded_rotation = 2 * sign(num_rotations)
+	rotation_text.text = "Rotations: " + str(rounded_rotation)
+	if rotation_direction > 0:
+		direction_text.text = "Direction: Right"
+	else:
+		direction_text.text = "Direction: Left"
+	level_text.text = "Level: " + str(level)
+	
 	start_rotation_base = start.x
 	start_rotation_hinge = start.y
 	stop_rotation = num_rotations * 360 * rotation_direction
+	#print("Initialize2")
+	level_overlay.texture = overlay
+	level_overlay.show()
 	_reset()
-	_toggle_visibility(true, true)
+	
+	#_toggle_visibility(true, true)
+	
+	
+	pass
 	
 func _reset_pendulum():
 	initialized = false
@@ -209,6 +314,8 @@ func _reset_pendulum():
 		i.queue_free()
 	pendulum_base.rotation = 0
 	stop_timer = 0
+	array_ink_index = 0
+	array_eof = false
 	active = false
 	img_saved = false
 	before_start = true
@@ -220,8 +327,13 @@ func _reset_pendulum():
 	pendulum_base.rotation = 0
 	base_rotation_goal = 0
 	pendulum_hinge.rotation = 0
+	button_left_locked = true
+	button_right_locked = true
+	level_overlay.hide()
 	_toggle_visibility(false, true)
+	panel_control.hide()
 	stopped = false
+	"""
 	for i in ink_holder.get_children():
 		i.queue_free()
 		
@@ -230,6 +342,12 @@ func _reset_pendulum():
 		
 	for i in view_draw_subport.get_children():
 		i.queue_free()
+	"""
+	for i in array_ink:
+		i.position = Vector2(-400, -400)
+		
+	for i in array_underlay:
+		i.position = Vector2(-400, -400)
 	
 func _toggle_visibility(on, menu):
 	if on:
@@ -244,6 +362,7 @@ func _toggle_visibility(on, menu):
 			pass
 			compass_base.show()
 		if menu:
+			$CanvasLayer.show()
 			button_left.show()
 			button_right.show()
 			button_menu.show()
@@ -258,6 +377,7 @@ func _toggle_visibility(on, menu):
 		if base_comp_vis:
 			compass_base.hide()
 		if menu:
+			$CanvasLayer.hide()
 			button_left.hide()
 			button_right.hide()
 			button_menu.hide()
@@ -267,64 +387,73 @@ func _toggle_visibility(on, menu):
 func _place_ink():
 	var ink_pos = pendulum_pen.to_global(Vector2(0, 0))
 	#inkPos = pendulum_base.to_local(inkPos)
-	if write_mode:
-		var ink_red = ink.instance()
-		ink_red._start("red", Vector2(ink_red_size, ink_red_size))
-		ink_red.position = ink_pos - Vector2(0, $PendControl/DetectionContainer.margin_top)
-		
-		sub_viewport.add_child(ink_red)
-		ink_red.z_index = -4
-		var ink_white = ink.instance()
-		ink_white._start("white", Vector2(ink_white_size, ink_white_size))
-		ink_white.position = ink_pos - Vector2(0, $PendControl/DetectionContainer.margin_top)
-		
-		sub_viewport.add_child(ink_white)
-		ink_white.z_index = -5
-		
-		var ink_view = ink.instance()
-		ink_view._start("white", Vector2(ink_white_size, ink_white_size))
-		ink_view.position = ink_pos - Vector2(0, $PendControl/ViewDrawContainer.margin_top)
-		
-		view_draw_subport.add_child(ink_view)
-		ink_view.z_index = -3
+	
+	
+	if array_ink_index < len(array_ink) and len(array_ink) != 0 and not array_eof:
+		#print("Moved")
+		array_ink[array_ink_index].position = ink_pos
+		array_underlay[array_ink_index].position = ink_pos
+		array_ink_index += 1
 	else:
+		#print("Created")
+		array_eof = true
 		var ink_blue = ink.instance()
 		ink_blue._start("blue", Vector2(ink_blue_size, ink_blue_size))
 		ink_blue.position = ink_pos #- Vector2(0, $PendControl/DetectionContainer.margin_top - 40)
 		sub_viewport.add_child(ink_blue)
 		ink_blue.z_index = -4
-	var inkInstance = ink.instance() 
-	inkInstance.position = ink_pos #- Vector2(0, $PendControl/ViewDrawContainer.margin_top)
-	ink_holder.add_child(inkInstance)
-	
+		var ink_instance = ink.instance()
+		ink_instance._start("grey", Vector2(ink_norm_size, ink_norm_size))
+		ink_instance.position = ink_pos #- Vector2(0, $PendControl/ViewDrawContainer.margin_top)
+		ink_holder.add_child(ink_instance)
+		array_ink.append(ink_instance)
+		array_underlay.append(ink_blue)
 	#ink_list.append(pendulum_pen.to_global(Vector2(0, 0)))
 	
 	
 func _on_pendulum_button_left():
 	#print("Left Pressed")
-	if before_start and initialized:
-			start_next = true
-	button_left_on = true
-	button_last_pressed = -1
-	_handle_button_input()
+	if before_start and initialized and not button_left_locked:
+		#print("OnLeft1")
+		start_next = true
+		start_buffer_side = -1
+		button_left_on = true
+		button_last_pressed = -1
+		_handle_button_input()
+		#print("OnLeft2")
 
 func _off_pendulum_button_left():
 	#print("Left Released")
-	button_left_on = false
-	_handle_button_input()
+	if initialized:
+		#print("OffButtonLeft1")
+		if not button_left_locked:
+			button_left_on = false
+			_handle_button_input()
+		#print("OffButtonLeft2")
+		#button_left_locked = false
+		#button_right_locked = false
 	
 func _on_pendulum_button_right():
 	#print("Right Pressed")
-	if before_start and initialized:
-			start_next = true
-	button_right_on = true
-	button_last_pressed = 1
-	_handle_button_input()
+	if before_start and initialized and not button_right_locked:
+		#print("OnRight1")
+		start_next = true
+		start_buffer_side = 1
+		button_right_on = true
+		button_last_pressed = 1
+		_handle_button_input()
+		#print("OnRight2")
 	
 func _off_pendulum_button_right():
 	#print("Right Released")
-	button_right_on = false
-	_handle_button_input()
+	if initialized:
+		#print("OffButtonRight1")
+		if not button_right_locked:
+			button_right_on = false
+			_handle_button_input()
+		#print("OffButtonRight2")
+	#button_right_locked = false
+	#button_left_locked = false
 	
 func _menu():
 	print("menu")
@@ -381,7 +510,78 @@ func _pendulum_rotation(delta):
 					_place_ink()
 					pen_ink_timer = 0
 				pen_ink_timer += 1
-				
+
+func _handle_pendulum_expand():
+	var rotation_count = floor(pendulum_base.rotation_degrees / 360)
+	if rotation_direction > 0:
+		if pendulum_base.rotation_degrees > 157.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 180 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[0]
+		elif pendulum_base.rotation_degrees > 180 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 202.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[1]
+		elif pendulum_base.rotation_degrees > 202.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 225 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[2]
+		elif pendulum_base.rotation_degrees > 225 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 247.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[3]
+		elif pendulum_base.rotation_degrees > 247.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 270 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[4]
+		elif pendulum_base.rotation_degrees > 270 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 292.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[5]
+		elif pendulum_base.rotation_degrees > 292.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 315 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[6]
+		elif pendulum_base.rotation_degrees > 315 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 337.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[7]
+		elif pendulum_base.rotation_degrees > 337.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 360 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[8]
+		elif pendulum_base.rotation_degrees > 0 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 22.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[9]
+		elif pendulum_base.rotation_degrees > 22.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 45 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[10]
+		elif pendulum_base.rotation_degrees > 45 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 67.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[11]
+		elif pendulum_base.rotation_degrees > 67.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 90 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[12]
+		elif pendulum_base.rotation_degrees > 90 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 112.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[13]
+		elif pendulum_base.rotation_degrees > 112.5 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 135 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[14]
+		elif pendulum_base.rotation_degrees > 135 + (rotation_count * 360) and pendulum_base.rotation_degrees <= 157.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[15]
+	elif rotation_direction < 0:
+		if pendulum_base.rotation_degrees < 202.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 180 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[0]
+		elif pendulum_base.rotation_degrees < 180 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 157.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[15]
+		elif pendulum_base.rotation_degrees < 157.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 135 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[14]
+		elif pendulum_base.rotation_degrees < 135 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 112.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[13]
+		elif pendulum_base.rotation_degrees < 112.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 90 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[12]
+		elif pendulum_base.rotation_degrees < 90+ (rotation_count * 360) and pendulum_base.rotation_degrees >= 67.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[11]
+		elif pendulum_base.rotation_degrees < 67.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 45 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[10]
+		elif pendulum_base.rotation_degrees < 45 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 22.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[9]
+		elif pendulum_base.rotation_degrees < 22.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 0 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[8]
+		elif pendulum_base.rotation_degrees < 360 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 337.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[7]
+		elif pendulum_base.rotation_degrees < 337.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 315 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[6]
+		elif pendulum_base.rotation_degrees < 315 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 292.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[5]
+		elif pendulum_base.rotation_degrees < 292.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 270 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[4]
+		elif pendulum_base.rotation_degrees < 270 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 247.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[3]
+		elif pendulum_base.rotation_degrees < 247.5 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 225 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[2]
+		elif pendulum_base.rotation_degrees < 225 + (rotation_count * 360) and pendulum_base.rotation_degrees >= 202.5 + (rotation_count * 360):
+			compass_base_sprite.texture = compass_expand_sprites[1]
+		
+			
+
 func _rotation_input():
 	if !hinge_rotation_active and !hinge_rotation_completed and button_currently_active != 0:
 		hinge_rotation_record = 0
@@ -403,11 +603,23 @@ func _input(event):
 		side += 1
 	if !button_left_on and !button_right_on:
 		button_currently_active = side
+		
 	if side != 0 and before_start and initialized:
-			start_next = true
+		#print("StartNext1")
+		start_next = true
+		#print("StartNext2")
 	
 	if Input.is_action_just_pressed("reset"):
 		_reset()
+		
+	if event is InputEventScreenTouch and not event.is_pressed():
+		#print("InputEventScreenTouch")
+		if initialized:
+			#print("ButtonUnlock1")
+			button_left_locked = false
+			button_right_locked = false
+			#print("ButtonUnlock2")
+	
 
 func _reset():
 	stop_timer = 0
@@ -415,15 +627,22 @@ func _reset():
 	img_saved = false
 	before_start = true
 	start_next = false
+	button_left_on = false
+	button_right_on = false
 	start_next_recognized = false
 	hinge_rotation_active = false
 	hinge_rotation_completed = false
 	hinge_rotation_current_goal = 0
+	array_ink_index = 0
+	array_eof = false
 	pendulum_base.rotation = deg2rad(start_rotation_base)
 	base_rotation_goal = pendulum_base.rotation + deg2rad(base_rotation_degrees_segment) * rotation_direction
 	pendulum_hinge.rotation = deg2rad(start_rotation_hinge)
 	_toggle_visibility(true, true)
+	if panel_vis:
+		panel_control.show()
 	stopped = false
+	"""
 	for i in ink_holder.get_children():
 		i.queue_free()
 		
@@ -432,6 +651,12 @@ func _reset():
 		
 	for i in view_draw_subport.get_children():
 		i.queue_free()
+	"""
+	for i in array_ink:
+		i.position = Vector2(-400, -400)
+		
+	for i in array_underlay:
+		i.position = Vector2(-400, -400)
 		
 	emit_signal("reset")
 		
@@ -453,6 +678,7 @@ func _set_comp_vis(base, pen):
 	pen_comp_vis = pen
 	
 	if initialized:
+		#print("CompVis1")
 		if base_comp_vis:
 			compass_base.show()
 		else:
@@ -462,8 +688,6 @@ func _set_comp_vis(base, pen):
 			compass.show()
 		else:
 			compass.hide()
-
-func _unhandled_input(event):
-	if event is InputEventScreenTouch and event.is_pressed():
-		print("FromPendulum")
-		
+		#print("CompVis2")
+func _set_panel_vis(val):
+	panel_vis = val

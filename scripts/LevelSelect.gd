@@ -79,6 +79,7 @@ func _add_button():
 		#print(current_page_instance.margin_left, " Margin left")
 		#print(current_page_instance.rect_position, " Rect position")
 		current_page_instance.set_anchor_and_margin(MARGIN_LEFT, 0.5, -360, true)
+		current_page_instance.set_anchor_and_margin(MARGIN_BOTTOM, 0.5, -540, true)
 		$CanvasLayer.add_child(current_page_instance)
 		page_array.append(current_page_instance)
 		current_page_instance.hide()
@@ -93,12 +94,14 @@ func _add_button():
 	levels_this_row += 1
 	levels_this_page += 1
 	var new_control = level_button.instance()
-	#new_control.set_anchor(MARGIN_LEFT, 0.5, false, true)
+	new_control.set_anchor_and_margin(MARGIN_TOP, 0.5, 0, true)
+	new_control.set_anchor_and_margin(MARGIN_BOTTOM, 0.5, 0, true)
 	var new_button = new_control.get_node("LevelButton")
 	var level_text = new_button.get_node("LevelText")
 	new_button.position = Vector2(pos_x, pos_y)
-	new_button.action = str(levels)
-	level_text.text = str(levels)
+	#new_button.action = str(levels)
+	#level_text.text = str(levels)
+	new_control._button_init(levels)
 	if levels_this_row < max_per_row:
 		pos_x += increment_x
 	else:

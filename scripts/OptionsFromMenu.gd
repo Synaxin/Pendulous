@@ -36,12 +36,12 @@ onready var sound_off = $CanvasLayer/OptionsPanel/SoundOff
 onready var menu_button = $CanvasLayer/OptionsPanel/MenuButton
 onready var del_prof = $CanvasLayer/OptionsPanel/DeleteProf
 onready var confirm_layer = $ConfirmationLayer
-onready var del_prof_no = $ConfirmationLayer/OptionsPanel/DelProfNo
-onready var del_prof_yes = $ConfirmationLayer/OptionsPanel/DelProfYes
-onready var del_prof_label = $ConfirmationLayer/OptionsPanel/DelProfText
+onready var del_prof_no = $ConfirmationLayer/OptionsPanel2/OptionsPanel/DelProfNo
+onready var del_prof_yes = $ConfirmationLayer/OptionsPanel2/OptionsPanel/DelProfYes
+onready var del_prof_label = $ConfirmationLayer/OptionsPanel2/OptionsPanel/DelProfText
 onready var confirm_layer_2 = $ConfirmationLayer2
-onready var del_prof_no_2 = $ConfirmationLayer2/OptionsPanel/DelProfNo
-onready var del_prof_yes_2 = $ConfirmationLayer2/OptionsPanel/DelProfYes
+onready var del_prof_no_2 = $ConfirmationLayer2/OptionsPanel2/OptionsPanel/DelProfNo
+onready var del_prof_yes_2 = $ConfirmationLayer2/OptionsPanel2/OptionsPanel/DelProfYes
 onready var del_prof_shown = $CanvasLayer/OptionsPanel/DelProfShown
 
 var del_prof_text = "Delete Profile "
