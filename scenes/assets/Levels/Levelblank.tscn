@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/assets/LevelInfo.gd" type="Script" id=1]
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 1 )
+base_length = 7
+hinge_length = 5
+num_rotations = 0.25
+base_rotation = -90
+hinge_rotation = -45
+overlay = "res:///art/Levels/Overlays/LevelblankOverlay.png"
+reference = "res:///art/Levels/References/LevelblankReference.png"
